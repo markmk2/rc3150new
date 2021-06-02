@@ -578,6 +578,10 @@ API.v1.addRoute('groups.online', { authRequired: true }, {
 		online.forEach((user) => {
 			const subscription = Subscriptions.findOneByRoomIdAndUserId(room._id, user._id, { fields: { _id: 1 } });
 			if (subscription) {
+				const isRequestingUserInGroup = Subscriptions.findOneByRoomIdAndUserId(room._id, this.userId, { fields: { _id: 1 } });
+				if (!isRequestingUserInGroup) {
+					return;
+				}
 				onlineInRoom.push({
 					_id: user._id,
 					username: user.username,
