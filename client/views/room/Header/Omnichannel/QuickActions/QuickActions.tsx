@@ -2,15 +2,7 @@ import { Box, ButtonGroup } from '@rocket.chat/fuselage';
 import { useMutableCallback } from '@rocket.chat/fuselage-hooks';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Session } from 'meteor/session';
-import React, {
-	memo,
-	useContext,
-	useCallback,
-	useState,
-	useEffect,
-	FC,
-	ComponentProps,
-} from 'react';
+import React, { memo, useContext, useCallback, FC, ComponentProps, useMemo } from 'react';
 import toastr from 'toastr';
 
 import { RoomManager } from '../../../../../../app/ui-utils/client';
@@ -31,6 +23,7 @@ import { useEndpoint, useMethod } from '../../../../../contexts/ServerContext';
 import { useSetting } from '../../../../../contexts/SettingsContext';
 import { useTranslation } from '../../../../../contexts/TranslationContext';
 import { useUserId } from '../../../../../contexts/UserContext';
+import { useEndpointData } from '../../../../../hooks/useEndpointData';
 import { QuickActionsActionConfig, QuickActionsEnum } from '../../../lib/QuickActions';
 import { QuickActionsContext } from '../../../lib/QuickActions/QuickActionsContext';
 
@@ -48,28 +41,17 @@ const QuickActions: FC<QuickActionsProps> = ({ room, className }) => {
 		(a, b) => (a.order || 0) - (b.order || 0),
 	);
 	const visibleActions = isMobile ? [] : actions.slice(0, 6);
-	const [email, setEmail] = useState('');
-	const visitorRoomId = room.v._id;
+
+	const visitorId = room.v._id;
 	const rid = room._id;
 	const uid = useUserId();
 
-	const getVisitorInfo = useEndpoint('GET', 'livechat/visitors.info');
+	const { value } = useEndpointData(
+		'livechat/visitors.info',
+		useMemo(() => ({ visitorId }), [visitorId]),
+	);
 
-	const getVisitorEmail = useMutableCallback(async () => {
-		if (!visitorRoomId) {
-			return;
-		}
-		const {
-			visitor: { visitorEmails },
-		} = await getVisitorInfo({ visitorId: visitorRoomId });
-		if (visitorEmails?.length && visitorEmails[0].address) {
-			setEmail(visitorEmails[0].address);
-		}
-	});
-
-	useEffect(() => {
-		getVisitorEmail();
-	}, [room, getVisitorEmail]);
+	const email = value?.visitor.visitorEmails.find((email) => email.address)?.address;
 
 	const closeModal = useCallback(() => setModal(null), [setModal]);
 

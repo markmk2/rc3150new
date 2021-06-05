@@ -8,7 +8,7 @@ import { useComponentDidUpdate } from '../../../hooks/useComponentDidUpdate';
 import { useForm } from '../../../hooks/useForm';
 
 type TranscriptModalProps = {
-	email: string;
+	email?: string;
 	room: IOmnichannelRoom;
 	onRequest: (email: string, subject: string) => void;
 	onSend?: (email: string, subject: string, token: string) => void;
@@ -30,7 +30,7 @@ const TranscriptModal: FC<TranscriptModalProps> = ({
 	const inputRef = useAutoFocus(true);
 
 	const { values, handlers } = useForm({
-		email: emailDefault || '',
+		email: emailDefault,
 		subject: t('Transcript_of_your_livechat_conversation'),
 	});
 
