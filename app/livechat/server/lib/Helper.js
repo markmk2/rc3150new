@@ -60,8 +60,8 @@ export const createLivechatRoom = (rid, name, guest, roomInfo = {}, extraData = 
 
 	Meteor.defer(() => {
 		Apps.triggerEvent(AppEvents.IPostLivechatRoomStarted, room);
-		callbacks.run('livechat.newRoom', room);
 	});
+	callbacks.run('livechat.newRoom', room);
 
 	sendMessage(guest, { t: 'livechat-started', msg: '', groupable: false }, room);
 
@@ -87,7 +87,7 @@ export const createLivechatInquiry = ({ rid, name, guest, message, initialStatus
 	const { msg } = message;
 	const ts = new Date();
 
-	const inquiry = Object.assign({
+	const inquiry = {
 		rid,
 		name,
 		ts,
@@ -104,7 +104,8 @@ export const createLivechatInquiry = ({ rid, name, guest, message, initialStatus
 		queueOrder: 1,
 		estimatedWaitingTimeQueue: 0,
 		estimatedServiceTimeAt: ts,
-	}, extraInquiryInfo);
+		...extraInquiryInfo,
+	};
 
 	return LivechatInquiry.insert(inquiry);
 };
@@ -221,7 +222,7 @@ export const dispatchInquiryQueued = (inquiry, agent) => {
 
 	const { department, rid, v } = inquiry;
 	const room = LivechatRooms.findOneById(rid);
-	Meteor.defer(() => callbacks.run('livechat.chatQueued', room));
+	callbacks.run('livechat.chatQueued', room);
 
 	if (RoutingManager.getConfig().autoAssignAgent) {
 		return;
@@ -241,10 +242,10 @@ export const dispatchInquiryQueued = (inquiry, agent) => {
 
 	onlineAgents.forEach((agent) => {
 		if (agent.agentId) {
-			agent = Users.findOneById(agent.agentId);
+			agent = Users.findOneById(agent.agentId); // TODO DESP: 1k finds
 		}
 		const { _id, active, emails, language, status, statusConnection, username } = agent;
-		sendNotification({
+		sendNotification({ // TODO DESP: check the comment below
 			// fake a subscription in order to make use of the function defined above
 			subscription: {
 				rid,
@@ -437,7 +438,7 @@ export const checkServiceStatus = ({ guest, agent }) => {
 	}
 
 	const { agentId } = agent;
-	const users = Users.findOnlineAgents(agentId);
+	const users = Users.findOnlineAgents(agentId); // TODO DESP: the name actually doesnt make sense something like: check if user is online
 	return users && users.count() > 0;
 };
 

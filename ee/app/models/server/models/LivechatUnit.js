@@ -138,10 +138,7 @@ export class LivechatUnit extends LivechatDepartment {
 	}
 
 	findByMonitorId(monitorId) {
-		const monitoredUnits = LivechatUnitMonitors.findByMonitorId(monitorId).fetch();
-		if (monitoredUnits.length === 0) {
-			return [];
-		}
+		const monitoredUnits = LivechatUnitMonitors.findByMonitorId(monitorId).fetch(); // TODO DESP: maybe a projection
 
 		return monitoredUnits.map((u) => u.unitId);
 	}

@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 import _ from 'underscore';
 
-import { LivechatRooms, LivechatVisitors, LivechatDepartment, LivechatTrigger } from '../../../../models';
+import { LivechatRooms, LivechatVisitors, LivechatDepartment, LivechatTrigger } from '../../../../models/server';
 import { Livechat } from '../../lib/Livechat';
 import { callbacks } from '../../../../callbacks/server';
 import { normalizeAgent } from '../../lib/Helper';
@@ -16,7 +16,7 @@ export function findTriggers() {
 }
 
 export function findDepartments() {
-	return LivechatDepartment.findEnabledWithAgents().fetch().map((department) => _.pick(department, '_id', 'name', 'showOnRegistration', 'showOnOfflineForm'));
+	return LivechatDepartment.findEnabledWithAgents().fetch().map((department) => _.pick(department, '_id', 'name', 'showOnRegistration', 'showOnOfflineForm')); // TODO DESP: { fields: .... }
 }
 
 export function findGuest(token) {
@@ -91,7 +91,7 @@ export function normalizeHttpHeaderData(headers = {}) {
 export function settings() {
 	const initSettings = Livechat.getInitSettings();
 	const triggers = findTriggers();
-	const departments = findDepartments();
+	const departments = findDepartments(); // TODO DESP: should we consider filter the deparments not enabled or visible for the widget?
 	const sound = `${ Meteor.absoluteUrl() }sounds/chime.mp3`;
 	const emojis = Meteor.call('listEmojiCustom');
 	return {

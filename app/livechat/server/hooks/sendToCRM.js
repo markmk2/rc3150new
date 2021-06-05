@@ -123,7 +123,7 @@ callbacks.add('livechat.closeRoom', (room) => {
 	return sendToCRM('LivechatSession', room);
 }, callbacks.priority.MEDIUM, 'livechat-send-crm-close-room');
 
-callbacks.add('livechat.newRoom', (room) => {
+callbacks.add('livechat.newRoom', (room) => { // TODO DESP: I would suggest remove the callbacks that has usage
 	if (!settings.get('Livechat_webhook_on_start')) {
 		return room;
 	}
@@ -143,7 +143,7 @@ callbacks.add('livechat.afterTakeInquiry', (inquiry) => {
 }, callbacks.priority.MEDIUM, 'livechat-send-crm-room-taken');
 
 callbacks.add('livechat.chatQueued', (room) => {
-	if (!settings.get('Livechat_webhook_on_chat_queued')) {
+	if (!settings.get('Livechat_webhook_on_chat_queued')) { // TODO DESP: I would suggest remove the callbacks that has usage
 		return room;
 	}
 

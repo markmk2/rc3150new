@@ -98,15 +98,15 @@ export class LivechatDepartmentAgents extends Base {
 	}
 
 	getOnlineForDepartment(departmentId) {
-		const agents = this.findByDepartmentId(departmentId).fetch();
+		const agents = this.findByDepartmentId(departmentId).fetch(); // TODO DESP: Potentially Dangerous
 
 		if (agents.length === 0) {
 			return;
 		}
 
-		const onlineUsers = Users.findOnlineUserFromList(_.pluck(agents, 'username'));
+		const onlineUsers = Users.findOnlineUserFromList(_.pluck(agents, 'username')); // TODO DESP: Potentially Dangerous
 
-		const onlineUsernames = _.pluck(onlineUsers.fetch(), 'username');
+		const onlineUsernames = _.pluck(onlineUsers.fetch(), 'username'); // TODO DESP: Potentially Dangerous
 
 		const query = {
 			departmentId,

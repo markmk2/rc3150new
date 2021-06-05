@@ -5,7 +5,7 @@ import { getUnitsFromUser } from './units';
 export const addQueryRestrictionsToRoomsModel = (originalQuery = {}) => {
 	const query = { ...originalQuery };
 
-	const units = getUnitsFromUser();
+	const units = getUnitsFromUser(); // TODO DESP: using a pure function that needs a Meteor.user
 	if (!Array.isArray(units)) {
 		return query;
 	}

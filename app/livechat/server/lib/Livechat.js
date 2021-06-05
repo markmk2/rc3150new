@@ -27,7 +27,7 @@ import {
 	LivechatCustomField,
 	LivechatVisitors,
 	LivechatInquiry,
-} from '../../../models';
+} from '../../../models/server';
 import { Logger } from '../../../logger';
 import { addUserRoles, hasPermission, hasRole, removeUserFromRoles, canAccessRoom } from '../../../authorization';
 import * as Mailer from '../../../mailer';
@@ -84,9 +84,9 @@ export const Livechat = {
 		}
 
 		if (department) {
-			return LivechatDepartmentAgents.getOnlineForDepartment(department);
+			return LivechatDepartmentAgents.getOnlineForDepartment(department); // TODO DESP
 		}
-		return Users.findOnlineAgents();
+		return Users.findOnlineAgents(); // TODO DESP: I think there is no Department defined to be shown so it will send to all agents
 	},
 
 	getBotAgents(department) {
@@ -100,7 +100,7 @@ export const Livechat = {
 	getRequiredDepartment(onlineRequired = true) {
 		const departments = LivechatDepartment.findEnabledWithAgents();
 
-		return departments.fetch().find((dept) => {
+		return departments.fetch().find((dept) => { // TODO DESP: 447 TO RETURN FALSE
 			if (!dept.showOnRegistration) {
 				return false;
 			}
@@ -234,7 +234,7 @@ export const Livechat = {
 					}
 				}
 
-				userId = LivechatVisitors.insert(userData);
+				userId = LivechatVisitors.insert(userData); // TODO DESP: sad
 			}
 		}
 
@@ -261,7 +261,7 @@ export const Livechat = {
 			updateUser.$set.department = dep && dep._id;
 		}
 
-		LivechatVisitors.updateById(userId, updateUser);
+		LivechatVisitors.updateById(userId, updateUser); // TODO DESP: useless sometimes
 
 		return userId;
 	},

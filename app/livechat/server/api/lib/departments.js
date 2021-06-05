@@ -6,7 +6,7 @@ import { callbacks } from '../../../../callbacks/server';
 
 
 export async function findDepartments({ userId, onlyMyDepartments = false, text, enabled, pagination: { offset, count, sort } }) {
-	if (!await hasPermissionAsync(userId, 'view-livechat-departments') && !await hasPermissionAsync(userId, 'view-l-room')) {
+	if (!await hasPermissionAsync(userId, 'view-livechat-departments') && !await hasPermissionAsync(userId, 'view-l-room')) { // TODO DESP: use one function
 		throw new Error('error-not-authorized');
 	}
 
@@ -76,7 +76,7 @@ export async function findDepartmentsToAutocomplete({ uid, selector, onlyMyDepar
 		},
 	};
 
-	if (onlyMyDepartments) {
+	if (onlyMyDepartments) { // DESP TODO: makes no sense based on callbacks name
 		conditions = callbacks.run('livechat.applyDepartmentRestrictions', conditions, { userId: uid });
 	}
 

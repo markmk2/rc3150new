@@ -3,7 +3,7 @@ import { addQueryRestrictionsToDepartmentsModel } from '../lib/query.helper';
 import { hasRole } from '../../../../../app/authorization/server/functions/hasRole';
 
 callbacks.add('livechat.applyDepartmentRestrictions', (originalQuery = {}, { userId } = { userId: null }) => {
-	if (!userId || !hasRole(userId, 'livechat-monitor')) {
+	if (!userId || !hasRole(userId, 'livechat-monitor')) { // TODO DESP: internally this role is tested again
 		return originalQuery;
 	}
 

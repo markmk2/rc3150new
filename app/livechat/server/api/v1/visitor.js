@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Match, check } from 'meteor/check';
 
-import { LivechatRooms, LivechatVisitors, LivechatCustomField } from '../../../../models';
+import { LivechatRooms, LivechatVisitors, LivechatCustomField } from '../../../../models/server';
 import { hasPermission } from '../../../../authorization';
 import { API } from '../../../../api/server';
 import { findGuest, normalizeHttpHeaderData } from '../lib/livechat';

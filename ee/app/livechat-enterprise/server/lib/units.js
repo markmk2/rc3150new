@@ -7,10 +7,11 @@ export function hasUnits() {
 }
 
 export function getUnitsFromUser() {
-	if (!hasUnits()) {
+	if (!hasUnits()) { // TODO DESP: no need to create a function to do that.
 		return;
 	}
 
+	// TODO DESP: this method thrust that you have a Meteor.user context, no way to know that right here.
 	// TODO remove this Meteor.call as this is used undirectly by models
 	return Meteor.call('livechat:getUnitsFromUserRoles');
 }

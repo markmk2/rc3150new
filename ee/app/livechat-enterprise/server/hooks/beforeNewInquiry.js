@@ -20,5 +20,5 @@ callbacks.add('livechat.beforeInquiry', (extraData = {}) => {
 	const queueOrder = 0;
 	const estimatedServiceTimeAt = new Date(now.setMinutes(now.getMinutes() + estimatedWaitingTimeQueue));
 
-	return Object.assign({ ...props }, { ts, queueOrder, estimatedWaitingTimeQueue, estimatedServiceTimeAt });
+	return { ...props, ts, queueOrder, estimatedWaitingTimeQueue, estimatedServiceTimeAt };
 }, callbacks.priority.MEDIUM, 'livechat-before-new-inquiry');
