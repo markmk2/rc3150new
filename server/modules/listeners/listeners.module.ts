@@ -162,9 +162,9 @@ export class ListenersModule {
 				return notifications.streamLivechatQueueData.emitWithoutBroadcast('public', { type, ...inquiry });
 			}
 
-			notifications.streamLivechatQueueData.emitWithoutBroadcast(inquiry._id, { ...inquiry, clientAction });
+			notifications.streamLivechatQueueData.emitWithoutBroadcast(inquiry._id, { ...inquiry, clientAction });// TODO DESP: no idea but doesn look good
 
-			if (!inquiry.department) {
+			if (!inquiry.department) { // TODO DESP: public will sent to 1k users
 				return notifications.streamLivechatQueueData.emitWithoutBroadcast('public', { type, ...inquiry });
 			}
 
