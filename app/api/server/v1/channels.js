@@ -684,6 +684,8 @@ API.v1.addRoute('channels.online', { authRequired: true }, {
 			return API.v1.failure('Channel does not exists');
 		}
 
+		const canUserViewOutsideRoom = hasPermission(this.userId, 'view-outside-room');
+
 		const online = Users.findUsersNotOffline({
 			fields: { username: 1 },
 		}).fetch();
@@ -692,6 +694,10 @@ API.v1.addRoute('channels.online', { authRequired: true }, {
 		online.forEach((user) => {
 			const subscription = Subscriptions.findOneByRoomIdAndUserId(room._id, user._id, { fields: { _id: 1 } });
 			if (subscription) {
+				const isRequestingUserInChannel = Subscriptions.findOneByRoomIdAndUserId(room._id, this.userId, { fields: { _id: 1 } });
+				if (!isRequestingUserInChannel && !canUserViewOutsideRoom) {
+					return;
+				}
 				onlineInRoom.push({
 					_id: user._id,
 					username: user.username,
